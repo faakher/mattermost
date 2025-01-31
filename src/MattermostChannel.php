@@ -5,13 +5,11 @@ namespace NotificationChannels\Mattermost;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request;
-use NotificationChannels\Mattermost\Exceptions\CouldNotSendNotification;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\Mattermost\Exceptions\CouldNotSendNotification;
 
 class MattermostChannel
 {
-
-
     protected Client $client;
 
     public function __construct(Client $client)
@@ -35,17 +33,16 @@ class MattermostChannel
 
             $body = json_encode([
                 'channel_id' => $mattermostChannelId,
-                'message' => $msg
+                'message' => $msg,
             ]);
 
             $headers = [
-                'Authorization' => 'Bearer ' . $token,
+                'Authorization' => 'Bearer '.$token,
                 'Content-Type' => 'application/json',
             ];
 
-            $request = new Request('POST', $mattermostServerUrl . '/api/v4/posts', $headers, $body);
+            $request = new Request('POST', $mattermostServerUrl.'/api/v4/posts', $headers, $body);
             $res = $this->client->sendAsync($request)->wait();
-
         } catch (ClientException $e) {
             throw CouldNotSendNotification::serviceRespondedWithAnError($e);
         }
