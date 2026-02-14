@@ -1,31 +1,15 @@
-Please see [this repo](https://github.com/laravel-notification-channels/channels) for instructions on how to submit a channel proposal.
+# Mattermost notifications channel for Laravel
 
-# A Boilerplate repo for contributions
-
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/laravel-notification-channels/mattermost.svg?style=flat-square)](https://packagist.org/packages/laravel-notification-channels/mattermost)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Build Status](https://img.shields.io/travis/laravel-notification-channels/mattermost/master.svg?style=flat-square)](https://travis-ci.org/laravel-notification-channels/mattermost)
-[![StyleCI](https://styleci.io/repos/:style_ci_id/shield)](https://styleci.io/repos/:style_ci_id)
-[![SensioLabsInsight](https://img.shields.io/sensiolabs/i/:sensio_labs_id.svg?style=flat-square)](https://insight.sensiolabs.com/projects/:sensio_labs_id)
-[![Quality Score](https://img.shields.io/scrutinizer/g/laravel-notification-channels/mattermost.svg?style=flat-square)](https://scrutinizer-ci.com/g/laravel-notification-channels/mattermost)
-[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/laravel-notification-channels/mattermost/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/laravel-notification-channels/mattermost/?branch=master)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel-notification-channels/mattermost.svg?style=flat-square)](https://packagist.org/packages/laravel-notification-channels/mattermost)
-
-This package makes it easy to send notifications using [Mattermost](link to service) with Laravel 10.x.
-
-**Note:** Replace ```Mattermost``` ```Mattermost``` ```Faizan Amin``` ```faakher``` ```https://media-xpertz.com``` ```faizan.amin@media-xpertz.com``` ```mattermost``` ```Mattermost Notifications Drive for Laravel``` ```:style_ci_id``` ```:sensio_labs_id``` with their correct values in [README.md](README.md), [CHANGELOG.md](CHANGELOG.md), [CONTRIBUTING.md](CONTRIBUTING.md), [LICENSE.md](LICENSE.md), [composer.json](composer.json) and other files, then delete this line.
-**Tip:** Use "Find in Path/Files" in your code editor to find these keywords within the package directory and replace all occurences with your specified term.
-
-This is where your description should go. Add a little code example so build can understand real quick how the package can be used. Try and limit it to a paragraph or two.
-
-
+[![StyleCI](https://styleci.io/repos/925234502/shield)](https://styleci.io/repos/925234502)
 
 ## Contents
 
+- [What is Mattermost?](#what-is-mattermost)
 - [Installation](#installation)
-	- [Setting up the Mattermost service](#setting-up-the-Mattermost-service)
+    - [Setting up the Mattermost service](#setting-up-the-mattermost-service)
 - [Usage](#usage)
-	- [Available Message methods](#available-message-methods)
+    - [Available Message Methods](#available-message-methods)
 - [Changelog](#changelog)
 - [Testing](#testing)
 - [Security](#security)
@@ -34,21 +18,76 @@ This is where your description should go. Add a little code example so build can
 - [License](#license)
 
 
+## What is Mattermost?
+Mattermost is an open-source, self-hostable online chat service with file sharing,
+search, and third party application integrations.
+It is designed as an internal chat for organizations and companies,
+and mostly markets itself as an open-source alternative to Slack and Microsoft Teams.
+For more information visit [Mattermost Website](https://mattermost.com/).
+
 ## Installation
 
-Please also include the steps for any third-party service setup that's required for this package.
+You can install the package via composer:
+
+``` bash
+composer require laravel-notification-channels/mattermost
+```
 
 ### Setting up the Mattermost service
 
-Optionally include a few steps how users can set up the service.
+Add your Mattermost config to your `config/services.php`:
+
+```php
+// config/services.php
+...
+'mattermost' => [
+    'token' => env('MATTERMOST_TOKEN'),
+    'server_url' => env('MATTERMOST_SERVER_URL'),
+    'channel_id' => env('MATTERMOST_CHANNEL_ID'),
+],
+...
+```
+
 
 ## Usage
 
-Some code examples, make it clear how to use the package
+Now you can use the channel in your `via()` method inside the notification:
 
-### Available Message methods
+``` php
+use NotificationChannels\Mattermost\MattremostChannel;
+use NotificationChannels\Mattermost\MattremostMessage;
+use Illuminate\Notifications\Notification;
 
-A list of all available options
+class ProjectCreated extends Notification
+{
+    public function via($notifiable)
+    {
+        return [MattremostChannel::class];
+    }
+
+    public function toMattermost($notifiable)
+    {
+        return MattremostMessage::create("Some Text")
+            ->headingLevel1("Heading 1")
+            ->boldText("This text is bold")
+            ->italidText("This text is italic", false);
+    }
+}
+```
+
+
+### Available Message Methods
+
+- `headingLevel1('')`
+- `headingLevel2('')`
+- `headingLevel3('')`
+- `headingLevel4('')`
+- `headingLevel5('')`
+- `headingLevel6('')`
+- `text('')`
+- `boldText('')`
+- `italicText('')`
+
 
 ## Changelog
 
